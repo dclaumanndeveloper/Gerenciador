@@ -7,7 +7,6 @@ namespace GerenciadorTarefas.Models;
 public class TarefaService
     {
         private readonly string _arquivoJson = "tarefas.json";
-
         public List<Tarefa> ObterTodos()
         {
             if (!File.Exists(_arquivoJson))
@@ -36,17 +35,14 @@ public class TarefaService
             string json = File.ReadAllText(_arquivoJson);
             var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(json);
 
-            // Encontrar a tarefa pelo ID
             var tarefaEncontrada = tarefas.FirstOrDefault(t => t.ID == id);
 
-        // Alterar os dados da pessoa
         if (tarefaEncontrada != null)
         {
             tarefaEncontrada.Titulo = tarefa.Titulo;
             tarefaEncontrada.Descricao = tarefa.Descricao;
             tarefaEncontrada.Status = tarefa.Status;
 
-            // Serializar de volta para JSON
             string novoJson = JsonConvert.SerializeObject(tarefas, Formatting.Indented);
             File.WriteAllText("tarefas.json", novoJson);
         }

@@ -1,0 +1,27 @@
+{
+    "deploy.reloaded": {
+        "targets": [
+            {
+                "name": "Gerenciador",
+                "options": {
+                    "exampleSetting1": true,
+                    "exampleSetting2": null,
+                    "exampleSetting3": "3",
+                    "exampleSetting4": 4.5,
+                    "exampleSetting5": [
+                        false,
+                        null,
+                        "6",
+                        7.8
+                    ],
+                    "exampleSetting6": {
+                        "exampleSubSetting6_1": "1.1",
+                        "exampleSubSetting6_2": 2.3
+                    }
+                },
+                "script": "./deploy.js",
+                "type": "script"
+            }
+        ]
+    }
+}

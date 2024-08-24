@@ -46,8 +46,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGFyZWZhcy9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/home/oem/Documentos/TesteAtak/GerenciadorTarefas/Views/Tarefas/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGFyZWZhcy9EZWxldGUuY3NodG1s
+[/home/oem/Documentos/TesteAtak/GerenciadorTarefas/Views/Tarefas/Deletar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGFyZWZhcy9EZWxldGFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/home/oem/Documentos/TesteAtak/GerenciadorTarefas/Views/Tarefas/Details.cshtml]

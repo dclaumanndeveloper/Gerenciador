@@ -95,9 +95,24 @@ namespace GerenciadorTarefas.Controllers
             return RedirectToAction("Index");
         }
      
-
         // GET: Tarefas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Deletar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tarefa = _tarefaService.Obter(id);
+            if (tarefa == null)
+            {
+                return NotFound();
+            }
+          
+            return View(tarefa);
+        }
+        // GET: Tarefas/Delete/5
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
