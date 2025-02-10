@@ -1,70 +1,75 @@
 using System.Collections.Generic;
 using System.IO;
-using GerenciadorTarefas.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Linq;
+
 namespace GerenciadorTarefas.Models;
+
 public class TarefaService
+{
+    private readonly string _arquivoJson = "tarefas.json";
+
+    public async Task<List<Tarefa>> ObterTodos()
     {
-        private readonly string _arquivoJson = "tarefas.json";
-
-        public List<Tarefa> ObterTodos()
+        if (!File.Exists(_arquivoJson))
         {
-            if (!File.Exists(_arquivoJson))
-            {
-                return new List<Tarefa>();
-            }
-
-            string json = File.ReadAllText(_arquivoJson);
-            return JsonConvert.DeserializeObject<List<Tarefa>>(json) ?? new List<Tarefa>();
+            return new List<Tarefa>();
         }
-        public Tarefa Obter(int? id){
-           string json = File.ReadAllText(_arquivoJson);
-           var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(json);
-           List<Tarefa> registros  = tarefas.Where(t => t.ID == id).ToList();
-           return registros[0];
-        }
-        public void Adicionar(Tarefa Tarefa)
-        {
-            var tarefas = ObterTodos();
-            int proximoId = tarefas.Any() ? tarefas.Max(t => t.ID) + 1 : 1;
-            Tarefa.ID = proximoId;
-            tarefas.Add(Tarefa);
-            Salvar(tarefas);
-        }
-        public void Atualizar(int id, Tarefa tarefa){
-            string json = File.ReadAllText(_arquivoJson);
-            var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(json);
 
-            // Encontrar a tarefa pelo ID
-            var tarefaEncontrada = tarefas.FirstOrDefault(t => t.ID == id);
+        string json = await File.ReadAllTextAsync(_arquivoJson);
+        return JsonSerializer.Deserialize<List<Tarefa>>(json) ?? new List<Tarefa>();
+    }
 
-        // Alterar os dados da pessoa
+    public async Task<Tarefa> Obter(int? id)
+    {
+        string json = await File.ReadAllTextAsync(_arquivoJson);
+        var tarefas = JsonSerializer.Deserialize<List<Tarefa>>(json);
+        List<Tarefa> registros = tarefas.Where(t => t.ID == id).ToList();
+        return registros[0];
+    }
+
+    public async Task Adicionar(Tarefa tarefa)
+    {
+        var tarefas = await ObterTodos();
+        int proximoId = tarefas.Any() ? tarefas.Max(t => t.ID) + 1 : 1;
+        tarefa.ID = proximoId;
+        tarefas.Add(tarefa);
+        await Salvar(tarefas);
+    }
+
+    public async Task Atualizar(int id, Tarefa tarefa)
+    {
+        string json = await File.ReadAllTextAsync(_arquivoJson);
+        var tarefas = JsonSerializer.Deserialize<List<Tarefa>>(json);
+
+        var tarefaEncontrada = tarefas.FirstOrDefault(t => t.ID == id);
+
         if (tarefaEncontrada != null)
         {
             tarefaEncontrada.Titulo = tarefa.Titulo;
             tarefaEncontrada.Descricao = tarefa.Descricao;
             tarefaEncontrada.Status = tarefa.Status;
 
-            // Serializar de volta para JSON
-            string novoJson = JsonConvert.SerializeObject(tarefas, Formatting.Indented);
-            File.WriteAllText("tarefas.json", novoJson);
+            string novoJson = JsonSerializer.Serialize(tarefas, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync("tarefas.json", novoJson);
         }
-        }
-         public void Deletar(int? id){
-  
-        string json = File.ReadAllText("tarefas.json");
-        var tarefas = JsonConvert.DeserializeObject<List<Tarefa>>(json);
+    }
+
+    public async Task Deletar(int? id)
+    {
+        string json = await File.ReadAllTextAsync("tarefas.json");
+        var tarefas = JsonSerializer.Deserialize<List<Tarefa>>(json);
 
         tarefas.RemoveAll(t => t.ID == id);
 
-        string novoJson = JsonConvert.SerializeObject(tarefas, Formatting.Indented);
-        File.WriteAllText("tarefas.json", novoJson);
+        string novoJson = JsonSerializer.Serialize(tarefas, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync("tarefas.json", novoJson);
     }
-   private void Salvar(List<Tarefa> Tarefas)
-        {
-            string json = JsonConvert.SerializeObject(Tarefas, Formatting.Indented);
-            File.WriteAllText(_arquivoJson, json);
-        }
-   
+
+    private async Task Salvar(List<Tarefa> tarefas)
+    {
+        string json = JsonSerializer.Serialize(tarefas, new JsonSerializerOptions { WriteIndented = true });
+        await File.WriteAllTextAsync(_arquivoJson, json);
     }
+}

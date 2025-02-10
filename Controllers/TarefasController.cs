@@ -20,10 +20,7 @@ namespace GerenciadorTarefas.Controllers
         // GET: Tarefas
         public async Task<IActionResult> Index()
         {
-             return View(_tarefaService.ObterTodos());
-            //return View();
-           // List<Tarefa> tarefas = new List<Tarefa>();
-           // return View(tarefas);
+             return View(await Task.Run(() => _tarefaService.ObterTodos()));
         }
 
         // GET: Tarefas/Details/5
@@ -35,7 +32,7 @@ namespace GerenciadorTarefas.Controllers
                 return NotFound();
             }
 
-            var tarefa = _tarefaService.Obter(id);
+            var tarefa = await Task.Run(() => _tarefaService.Obter(id));
             if (tarefa == null)
             {
                 return NotFound();
@@ -58,7 +55,7 @@ namespace GerenciadorTarefas.Controllers
         public async Task<IActionResult> Create(Tarefa tarefa)
         {
             tarefa.ID = id+1;
-            _tarefaService.Adicionar(tarefa);
+            await Task.Run(() => _tarefaService.Adicionar(tarefa));
             return RedirectToAction("Index");
         }
 
@@ -70,7 +67,7 @@ namespace GerenciadorTarefas.Controllers
                 return NotFound();
             }
 
-            var tarefa = _tarefaService.Obter(id);
+            var tarefa = await Task.Run(() => _tarefaService.Obter(id));
             if (tarefa == null)
             {
                 return NotFound();
@@ -91,20 +88,35 @@ namespace GerenciadorTarefas.Controllers
                 return NotFound();
             }
 
-            _tarefaService.Atualizar(id,tarefa);
+            await Task.Run(() => _tarefaService.Atualizar(id, tarefa));
             return RedirectToAction("Index");
         }
      
-
         // GET: Tarefas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Deletar(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            _tarefaService.Deletar(id);
+            var tarefa = await Task.Run(() => _tarefaService.Obter(id));
+            if (tarefa == null)
+            {
+                return NotFound();
+            }
+          
+            return View(tarefa);
+        }
+        // GET: Tarefas/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await Task.Run(() => _tarefaService.Deletar(id));
             return RedirectToAction("Index");
         }
     }

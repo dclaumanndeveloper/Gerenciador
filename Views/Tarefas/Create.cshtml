@@ -1,12 +1,10 @@
 ﻿@model GerenciadorTarefas.Models.Tarefa
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Cadastro de Tarefa";
 }
 
-<h1>Create</h1>
-
-<h4>Tarefa</h4>
+<h1>Cadastro</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -27,15 +25,15 @@
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="margin:5px;">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div style="margin-left:80px; margin-top:-42px;">
+    <a asp-action="Index" class="btn btn-dark">Voltar</a>
 </div>
 
 @section Scripts {
